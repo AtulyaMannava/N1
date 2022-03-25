@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url": "https://gis-cityofchampaign.opendata.arcgis.com/datasets/979bbeefffea408e8f1cb7a397196c64_22.csv"
+  },
+  "hconcat": [
+    {
+      "selection": {"brush": {"type": "interval"}},
+      "config": {
+        "axisY": {"minExtent": 30},
+        "view": {"width": 600, "height": 600}
+      },
+      "mark": "circle",
+      "encoding": {
+        "x": {"field": "X", "type": "quantitative", "scale": {"zero": false}},
+        "y": {"field": "Y", "type": "quantitative", "scale": {"zero": false}},
+        "shape": {"field": "TREETYPE", "type": "nominal"},
+        "color": {
+          "condition": {
+            "selection": "brush",
+            "field": "TREETYPE",
+            "type": "nominal"
+          },
+          "value": "grey"
+        }
+      }
+    },
+    {
+      "params": [{"name": "pts", "select": "point"}],
+      "mark": "point",
+      "config": {
+        "axisY": {"minExtent": 30},
+        "view": {"width": 600, "height": 600}
+      },
+      "encoding": {
+        "x": {"field": "X", "type": "quantitative", "scale": {"zero": false}},
+        "y": {"field": "Y", "type": "quantitative", "scale": {"zero": false}},
+        "color": {
+          "condition": {
+            "param": "pts",
+            "field": "TREETYPE",
+            "type": "ordinal",
+            "scale": {"scheme": "yelloworangebrown"}
+          },
+          "value": "grey"
+        },
+        "size": {
+          "condition": {"param": "pts", "empty": false, "value": 200},
+          "value": 50
+        }
+      }
+    }
+  ],
+  "config": {"axisY": {"minExtent": 30}}
+}
