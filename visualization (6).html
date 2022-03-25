@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.8"></script>
+</head>
+<body>
+  <div id="vis"/>
+  <script>
+    const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A scatterplot showing trees in champaign",
+  "data": {
+    "url": "https://gis-cityofchampaign.opendata.arcgis.com/datasets/979bbeefffea408e8f1cb7a397196c64_22.csv"
+  },
+  "hconcat": [
+    {
+      "params": [{"name": "grid", "select": "interval", "bind": "scales"}],
+      "config": {
+        "axisY": {"minExtent": 30},
+        "view": {"width": 600, "height": 600}
+      },
+      "mark": "circle",
+      "encoding": {
+        "x": {"field": "X", "type": "quantitative", "scale": {"zero": false}},
+        "y": {"field": "Y", "type": "quantitative", "scale": {"zero": false}},
+        "color": {"field": "TREETYPE", "type": "nominal"},
+        "shape": {"field": "TREETYPE", "type": "nominal"}
+      }
+    },
+    {
+      "selection": {"brush": {"type": "interval"}},
+      "config": {
+        "axisY": {"minExtent": 30},
+        "view": {"width": 600, "height": 600}
+      },
+      "mark": "circle",
+      "encoding": {
+        "x": {"field": "X", "type": "quantitative", "scale": {"zero": false}},
+        "y": {"field": "Y", "type": "quantitative", "scale": {"zero": false}},
+        "shape": {"field": "TREETYPE", "type": "nominal"},
+        "color": {
+          "condition": {
+            "selection": "brush",
+            "field": "TREETYPE",
+            "type": "nominal"
+          },
+          "value": "grey"
+        }
+      }
+    },
+    {
+      "params": [{"name": "pts", "select": "point"}],
+      "mark": "point",
+      "config": {
+        "axisY": {"minExtent": 30},
+        "view": {"width": 600, "height": 600}
+      },
+      "encoding": {
+        "x": {"field": "X", "type": "quantitative", "scale": {"zero": false}},
+        "y": {"field": "Y", "type": "quantitative", "scale": {"zero": false}},
+        "color": {
+          "condition": {
+            "param": "pts",
+            "field": "TREETYPE",
+            "type": "ordinal",
+            "scale": {"scheme": "yelloworangebrown"}
+          },
+          "value": "grey"
+        },
+        "size": {
+          "condition": {"param": "pts", "empty": false, "value": 200},
+          "value": 50
+        }
+      }
+    }
+  ],
+  "config": {}
+};
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+</body>
+</html>
